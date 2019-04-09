@@ -1,86 +1,78 @@
-/* ## documentation ##
-http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#prop-scale
-http://molleindustria.github.io/p5.play/examples/index.html?fileName=asteroids.js
-// constructor
-https://www.youtube.com/watch?v=rHiSsgFRgx4&list=PLRqwX-V7Uu6Zy51Q-x9tMWIv9cueOFTFA&index=24
-*/
-
-
+//GameObjects
 let player;
-let bullets;
 
+//Weapon 
+let weapon = 1;
+let weaponBoxes; //caisses
+let boxTimer;
+let bullets;
+let intervalBoxSpawn = 5000;
+
+let walls, ennemis;
+//Sprites
 let persoSprite, ennemiSprite, colliderSprite;
 
+//Ennemis spawn
+let mancheId = 0;
+let nbrEnnemisParManche = [5, 10, 15, 20, 25, 30];
 
+// score counter
+let nbrEnnemisKilled = 0;
 
-function preload(){
+//variables d'état de jeu 
+let start = true;
+let gameOver = false;
+let win = false;
+
+//color of game
+backgroundColor = '#000080';
+playerColor = '#ffffff';
+wallColor = '#B2B2D8';
+bulletColor ='#ffd700';
+textColor = '#B2B2D8';
+//size
+let big = 40;
+let small = 20;
+
+let timer = 0;
+
+function preload() {
   persoSprite = loadImage('assets/anim1.png');
   ennemiSprite = loadImage('assets/anim2.png');
-  //colliderSprite = loadImage('assets/anim3.png');
+  colliderSprite = loadImage('assets/anim3.png');
 }
 
 
-function setup(){
-  createCanvas(windowWidth, windowHeight);
-  player = createSprite(width/2, height/2);
-  //player.shapeColor = color(255);
-  player.scale = 0.2;
-  player.setCollider('circle', 0, 0, 20);
-  player.addImage(ennemiSprite);
-  
+function setup() {
+  createCanvas(windowWidth, windowHeight);   
+  weaponBoxes = new Group();
+  walls = new Group();
+  ennemis = new Group();
   bullets = new Group();
+  addPerso();
+  addwalls();
+  lancerManche();
   
+  textAlign(CENTER);
+  fill(textColor);
 }
 
-function draw(){
-  background(50);
-  
-  //image(persoSprite, 0, 0);
-  
-    if(keyDown(LEFT_ARROW))
-    player.rotation -= 4;
-    if(keyDown(RIGHT_ARROW))
-    player.rotation += 4;
-    if(keyDown(UP_ARROW))
-    player.addSpeed(0.2, player.rotation);
-    if(keyWentUp(UP_ARROW))
-    player.setSpeed(0,0);
-    
-  
-  
-    if(keyWentDown('x')){
-    let bullet = createSprite(player.position.x, player.position.y);
-    bullet.addImage(persoSprite);
-    bullet.setSpeed(10, player.rotation);
-    bullet.life = 30;
-    bullets.add(bullet);
-  }
-  
-  drawSprites();
+function draw() {
+  background(backgroundColor);
+  scenes();
 }
 
-/*
-function keyPressed(){
-  if(keyCode == DOWN_ARROW){
-    player.setSpeed(1, 90);
-    //player.velocity.y = 1;
-  }
-  else if(keyCode == UP_ARROW){
-    player.setSpeed(1, 270);
-    //player.velocity.y = -1;
-  }
-  else if(keyCode == RIGHT_ARROW){
-    player.setSpeed(1, 0);
-    //player.velocity.x = 1;
-  }
-  else if(keyCode == LEFT_ARROW){
-    player.setSpeed(1, 180);
-    //player.velocity.x = -1;
-  }
+function resetGame(){
+  bullets.removeSprites();
+  walls.removeSprites();
+  ennemis.removeSprites();
+  weaponBoxes.removeSprites();
+  player.remove();
+  mancheId = 0;
+  nbrEnnemisKilled = 0;  
+  setup();
 }
-function keyReleased(){  
-  if(keyCode == DOWN_ARROW || keyCode == UP_ARROW || keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW){
-  player.setSpeed(0,0);
-  }
-}
-*/
+
+  
+  
+ 
