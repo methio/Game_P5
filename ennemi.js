@@ -2,42 +2,57 @@ function addEnnemi() {
   let posx = random(width);
   let posy = height + 10;
   let ennemi = createSprite(posx, posy, 10, 10);
-  ennemi.shapeColor = color(255, 0, 0); 
-  ennemi.maxSpeed = 2;
-  ennemi.friction = .01;
+  //ennemi.shapeColor = color(255, 0, 0); 
+  ennemi.addImage(ennemiSprite);
+ // ennemi.debug = true;
+  ennemi.scale = 0.05;
+  ennemi.maxSpeed = 2;    
+  ennemi.friction = EnnemisSpeed;  //friction of sprite
   ennemis.add(ennemi);
 }
 
-
 function ennemiBehavior() {
-  ennemis.collide(walls);
-  bullets.overlap(ennemis, removeEnnemi);
+  ennemis.collide(walls);          //ennemi collisions
+  bullets.overlap(ennemis, function removeEnnemi(bullets, enn) {
+                                   //zombie modification
+    enn.shapeColor = color(0, random(255), 0);
+    enn.width += 2;
+    enn.height += 2;
+                                   // zombie death
+    if(enn.width >= 15){
+    enn.remove();
+    checkEnnemis();                // check if it was the last zombie on the map
+    nbrEnnemisKilled +=1;          // increment zombie text
+    weaponMagazine +=1;            // fix bullets disparition
+    }
+  });
 
   for (let i = 0; i < ennemis.length; i++) {
-    ennemis[i].attractionPoint(0.05, player.position.x, player.position.y);
-  }
-}
-
-function removeEnnemi(bullets, enn) {
-  enn.remove();
-  checkEnnemis();
-  nbrEnnemisKilled +=1;
+                                  //make ennemis follow the player
+    ennemis[i].attractionPoint(1, player.position.x, player.position.y);    
+                                  // if the ennemi is blocked against a wall, make him teleport
+    ennemis[i].overlap(walls, function teleport(enn, wall) {
+      enn.position.x += random(-3, 3);
+      enn.position.y += random(-3, 3);
+    });
+  }   
 }
 
 function lancerManche() {
   for (let i=0; i < nbrEnnemisParManche[mancheId]; i++) {
-    setTimeout(addEnnemi(), random(4000));
+    addEnnemi();
   }
 }
 
 function checkEnnemis() {
   if (ennemis.length <= 0) {
-    mancheId++;
+    mancheId++;                    // increment round
+    EnnemisSpeed -= 0.02;          // increment ennemis speed for next round
+    
     if (mancheId >= nbrEnnemisParManche.length) {
-      win = true;
-      // WIN
+      win = true;                  // if no more round, you win
     } else {
-      lancerManche();
+      lancerManche();              // else launch new round
     }
   }
 }

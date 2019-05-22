@@ -1,6 +1,8 @@
 //Wall function, create a random scene
 function addwalls(){
-  /*## Center ##*/  
+  
+/* //############## V1 ##################
+  //## Center ##  
    let wc1 = createSprite(width/2 + 200, height/2 - 150,  150, 200); 
    wc1.shapeColor = color(wallColor);
    walls.add(wc1);   
@@ -14,7 +16,7 @@ function addwalls(){
    wc4.shapeColor = color(wallColor);
    walls.add(wc4);
   
-  /*## Border ##*/
+  //## Border ##
   for (let i = 0; i < 10; i++) {
     let w = createSprite(random(10, width/4), random(10, height) ,random(10, 100), random(40, 150));
     let w1 = createSprite(random(width - width/4 , width), random(10, height) ,random(10, 100), random(40, 150));
@@ -42,5 +44,26 @@ function addwalls(){
     walls.add(w1);
     walls.add(w2);
     walls.add(w3);
+  }
+*/
+  //############## V2 ##################
+  
+  for (let x=50; x<10*90; x+=15) {
+    for (let y=50; y<10*90; y+=15) {
+      createAWall(x, y);
+    }
+  }
+}
+
+function createAWall(x, y){
+  let posx = x;
+  let posy = y;
+  let Rand = random(10);
+  if(Rand >= 9){
+    let wall = createSprite(posx, posy, 15, 15);
+    wall.shapeColor = color(wallColor);
+    walls.add(wall);
+  } else {
+  return;
   }
 }
