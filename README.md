@@ -1,2 +1,1 @@
-# Game_P5
-game created with P5_play library
+# P5 game based on P5.play librairy
