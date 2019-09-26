@@ -1,6 +1,7 @@
-//Gère l'alternance des scènes
-function scenes(){
+function scenes(){        //scene manager
   if(start){
+    textSize(extrabig);
+    text("ZOMBIE AGE",width/2, height/2 - 100);
     textSize(big);
     text("Press 'B' to start Game", width/2, height/2);
     text("Use 'X' to shoot", width/2, height/2 + 50);
@@ -31,10 +32,10 @@ function scenes(){
       start = true;
     }
   } else { 
-    //etat en jeux
+                          //When game is playing
     ennemiBehavior();
-    persoBehavior();    
-    weaponBehavior();
+    persoBehavior();     
     drawSprites();  
+    weaponBehavior();
   }
 }

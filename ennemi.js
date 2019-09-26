@@ -2,10 +2,10 @@ function addEnnemi() {
   let posx = random(width);
   let posy = height + 10;
   let ennemi = createSprite(posx, posy, 10, 10);
-  //ennemi.shapeColor = color(255, 0, 0); 
-  ennemi.addImage(ennemiSprite);
- // ennemi.debug = true;
-  ennemi.scale = 0.05;
+  ennemi.setCollider('circle', 0, 0, 6);
+  ennemi.addAnimation('run', 'assets/SpriteZombie-1.png', 'assets/SpriteZombie-2.png');
+  //ennemi.debug = true;
+  //ennemi.scale = 0.05;
   ennemi.maxSpeed = 2;    
   ennemi.friction = EnnemisSpeed;  //friction of sprite
   ennemis.add(ennemi);
@@ -29,12 +29,24 @@ function ennemiBehavior() {
 
   for (let i = 0; i < ennemis.length; i++) {
                                   //make ennemis follow the player
-    ennemis[i].attractionPoint(1, player.position.x, player.position.y);    
+    ennemis[i].attractionPoint(1, player.position.x, player.position.y); 
+                                  // ennemis animation
+    ennemis[i].changeAnimation('run');
                                   // if the ennemi is blocked against a wall, make him teleport
     ennemis[i].overlap(walls, function teleport(enn, wall) {
       enn.position.x += random(-3, 3);
       enn.position.y += random(-3, 3);
+      
+      /*
+      overlapingDelay += 1;
+      console.log(overlapingDelay);      
+                                        //make ennemi move away
+    if(overlapingDelay >= 10){
+       enn.position.x += 20;
+    } 
+    */
     });
+
   }   
 }
 
